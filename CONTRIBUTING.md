@@ -1,6 +1,6 @@
 ## Reporting issues
 
-1. Feel free to report any issue or proposal [here](https://github.com/castle-dev/le-converter-service/issues).
+1. Feel free to report any issue or proposal [here](https://github.com/castle-dev/le-storage-provider-firebase/issues).
 
 ## Commit Message Format
 Each commit message consists of a **header**, a **body** and a **footer**.  The header has a special
