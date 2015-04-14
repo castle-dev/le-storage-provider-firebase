@@ -13,7 +13,7 @@ gulp.task('clean', function () {
 })
 
 gulp.task('docs', function () {
-  return gulp.src('src/**/*.js')
+  return gulp.src(['README.md', 'src/**/*.js'])
   .pipe(jsdoc('./docs', { path: 'ink-docstrap', theme: 'cyborg' }));
 });
 
