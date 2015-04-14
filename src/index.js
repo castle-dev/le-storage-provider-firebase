@@ -4,8 +4,8 @@ function isDate (object) {
   return Object.prototype.toString.call(object) === '[object Date]'
 }
 /**
- * A module for integrating le-storage-service and firebase
- * @module StorageProviderFirebase
+ * A provider for integrating le-storage-service and firebase
+ * @class StorageProviderFirebase
  * @param {string} url the firebase root url
  * @returns {Object} StorageProviderFirebase
  */
@@ -91,6 +91,9 @@ var StorageProviderFirebase = function (url) {
    * with the record's id. All Date objects
    * are converted to server timestamps before
    * sending to firebase.
+   * @function save
+   * @memberof StorageProviderFirebase
+   * @instance
    * @param {string} collection the namespace to store the data under
    * @param {string} id the unique identifier for this data
    * @param {Object} data the data to store
@@ -119,6 +122,9 @@ var StorageProviderFirebase = function (url) {
    *
    * The server timestamps are converted
    * back to client Dates before resolving
+   * @function load
+   * @memberof StorageProviderFirebase
+   * @instance
    * @param {string} collection the namespace to load the data from
    * @param {string} id the unique identifier for this data
    * @returns {Promise} promise resolves with the loaded data
@@ -135,6 +141,9 @@ var StorageProviderFirebase = function (url) {
   };
   /**
    * Set a sync listener for updates from firebase
+   * @function sync
+   * @memberof StorageProviderFirebase
+   * @instance
    * @param {string} collection the namespace to load the data from
    * @param {string} id the unique identifier for this data
    * @param {Function} callback the callback that receives updates to the data
@@ -151,6 +160,9 @@ var StorageProviderFirebase = function (url) {
   };
   /**
    * Removes sync listeners
+   * @function unsync
+   * @memberof StorageProviderFirebase
+   * @instance
    * @param {string} collection the namespace to load the data from
    * @param {string} id the unique identifier for this data
    */
@@ -159,6 +171,9 @@ var StorageProviderFirebase = function (url) {
   };
   /**
    * Look up data by collection
+   * @function query
+   * @memberof StorageProviderFirebase
+   * @instance
    * @param {string} collection the namespace to load the data from
    * @param {string} sortBy (optional) the property to sort the results by
    * @param {string} equalTo (optional) the property to filter the sort property by

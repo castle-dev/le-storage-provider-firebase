@@ -21,8 +21,8 @@ A module for integrating le-storage-service and firebase
 
 ## Tests
 
-  `npm test` to run unit tests once
-  `gulp tdd` to run unit tests on every file change
+* `npm test` to run unit tests once
+* `gulp tdd` to run unit tests on every file change
 
 ## Contributing
 
