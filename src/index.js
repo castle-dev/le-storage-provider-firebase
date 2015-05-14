@@ -173,10 +173,7 @@ var StorageProviderFirebase = function (url) {
           callback(convertedData);
         })
       });
-    }
-    finally {
-      
-    }
+    } finally {}
     return this.load(collection, id);
   };
 

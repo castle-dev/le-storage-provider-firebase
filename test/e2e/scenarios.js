@@ -9,6 +9,11 @@ var expect = chai.expect;
 function testSaveErrorCase () {
 	describe('update record with invalid data::', function() {
 		this.timeout(10000);
+		after(function() {
+			setTimeout(function(){
+				process.exit(0);
+			}, 100);
+		});
 		it('should reject the promise', function() {
 			var data = {undefinedData: undefined};
 			var returnedPromise = provider.save('namespace', '1234', data);

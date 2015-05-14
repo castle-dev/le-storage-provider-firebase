@@ -26,7 +26,10 @@ gulp.task('test:unit', function () {
 gulp.task('test:e2e', function () {
   return gulp.src('test/e2e/**/*.js', {read: false})
   .pipe(mocha({reporter: 'nyan'}))
-  .on('error', util.log);
+  .on('error', function () {
+      util.log(error);
+      process.exit(-1);
+  });
 });
 
 gulp.task('watch', function () {
@@ -39,4 +42,8 @@ gulp.task('tdd', function (done) {
   runSequence('test:unit', 'watch', done)
 });
 
-gulp.task('test', ['test:unit', 'test:e2e']);
+gulp.task('test', function (done) {
+  runSequence('test:unit', 'test:e2e', done)
+});
+
+// gulp.task('test', ['test:unit', 'test:e2e']);
