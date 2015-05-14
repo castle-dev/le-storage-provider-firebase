@@ -104,15 +104,25 @@ var StorageProviderFirebase = function (url) {
     convertClientDatesToServerTimes(data)
     .then(function (convertedData) {
       if (id) { // update
-        _ref.child(collection).child(id).set(convertedData, function (err) {
-          if (err) { deferred.reject(err); }
-          else { deferred.resolve(id); }
-        });
+        try {
+          _ref.child(collection).child(id).set(convertedData, function (err) {
+            if (err) { deferred.reject(err); }
+            else { deferred.resolve(id); }
+          });          
+        }
+        catch(err) {
+          deferred.reject(err);
+        }
       } else { // create
-        var newRef = _ref.child(collection).push(convertedData, function (err) {
-          if (err) { deferred.reject(err); }
-          else { deferred.resolve(newRef.key()); }
-        });
+        try {
+          var newRef = _ref.child(collection).push(convertedData, function (err) {
+            if (err) { deferred.reject(err); }
+            else { deferred.resolve(newRef.key()); }
+          });
+        }
+        catch(err) {
+          deferred.reject(err);
+        }
       }
     })
     return deferred.promise;
@@ -131,12 +141,18 @@ var StorageProviderFirebase = function (url) {
    */
   this.load = function (collection, id) {
     var deferred = q.defer();
-    _ref.child(collection).child(id).once('value', function (snapshot) {
-      convertServerTimesToClientDates(snapshot.val())
-      .then(function (convertedData) {
-        deferred.resolve(convertedData);
+    try {
+      _ref.child(collection).child(id).once('value', function (snapshot) {
+        convertServerTimesToClientDates(snapshot.val())
+        .then(function (convertedData) {
+          deferred.resolve(convertedData);
+        });
       });
-    });
+    }
+    catch (err) {
+      deferred.reject(err);
+    }
+
     return deferred.promise;
   };
   /**
@@ -150,14 +166,20 @@ var StorageProviderFirebase = function (url) {
    * @returns {Promise} promise resolves with the loaded data
    */
   this.sync = function (collection, id, callback) {
-    _ref.child(collection).child(id).on('value', function (snapshot) {
-      convertServerTimesToClientDates(snapshot.val())
-      .then(function (convertedData) {
-        callback(convertedData);
-      })
-    });
+    try {
+      _ref.child(collection).child(id).on('value', function (snapshot) {
+        convertServerTimesToClientDates(snapshot.val())
+        .then(function (convertedData) {
+          callback(convertedData);
+        })
+      });
+    }
+    finally {
+      
+    }
     return this.load(collection, id);
   };
+
   /**
    * Removes sync listeners
    * @function unsync
