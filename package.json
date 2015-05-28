@@ -38,7 +38,6 @@
     "run-sequence": "^1.0.2"
   },
   "dependencies": {
-    "firebase": "^2.2.3",
     "q": "^1.2.0"
   }
 }
