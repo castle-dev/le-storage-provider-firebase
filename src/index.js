@@ -108,7 +108,7 @@ var StorageProviderFirebase = function (url) {
           _ref.child(collection).child(id).set(convertedData, function (err) {
             if (err) { deferred.reject(err); }
             else { deferred.resolve(id); }
-          });          
+          });
         }
         catch(err) {
           deferred.reject(err);
@@ -147,12 +147,13 @@ var StorageProviderFirebase = function (url) {
         .then(function (convertedData) {
           deferred.resolve(convertedData);
         });
+      }, function (err) {
+        deferred.reject(err);
       });
     }
     catch (err) {
       deferred.reject(err);
     }
-
     return deferred.promise;
   };
   /**
