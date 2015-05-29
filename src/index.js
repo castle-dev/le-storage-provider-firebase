@@ -1,16 +1,16 @@
-var Firebase = require('firebase');
 var q = require('q');
 function isDate (object) {
   return Object.prototype.toString.call(object) === '[object Date]'
 }
 /**
  * A provider for integrating le-storage-service and firebase
- * @class StorageProviderFirebase
- * @param {string} url the firebase root url
- * @returns {Object} StorageProviderFirebase
+ * @class StorageProvider
+ * @param {string} ref the firebase root reference
+ * @returns {Object} StorageProvider
  */
-var StorageProviderFirebase = function (url) {
-  var _ref = new Firebase(url);
+var StorageProvider = function (ref) {
+  if (!ref) { throw new Error('Firebase reference required'); }
+  var _ref = ref;
   function convertClientDatesToServerTimes (data) {
     var deferred = q.defer();
     function translateDatesRecursive(obj, path, offset) {
@@ -92,7 +92,7 @@ var StorageProviderFirebase = function (url) {
    * are converted to server timestamps before
    * sending to firebase.
    * @function save
-   * @memberof StorageProviderFirebase
+   * @memberof StorageProvider
    * @instance
    * @param {string} collection the namespace to store the data under
    * @param {string} id the unique identifier for this data
@@ -133,7 +133,7 @@ var StorageProviderFirebase = function (url) {
    * The server timestamps are converted
    * back to client Dates before resolving
    * @function load
-   * @memberof StorageProviderFirebase
+   * @memberof StorageProvider
    * @instance
    * @param {string} collection the namespace to load the data from
    * @param {string} id the unique identifier for this data
@@ -159,7 +159,7 @@ var StorageProviderFirebase = function (url) {
   /**
    * Set a sync listener for updates from firebase
    * @function sync
-   * @memberof StorageProviderFirebase
+   * @memberof StorageProvider
    * @instance
    * @param {string} collection the namespace to load the data from
    * @param {string} id the unique identifier for this data
@@ -181,7 +181,7 @@ var StorageProviderFirebase = function (url) {
   /**
    * Removes sync listeners
    * @function unsync
-   * @memberof StorageProviderFirebase
+   * @memberof StorageProvider
    * @instance
    * @param {string} collection the namespace to load the data from
    * @param {string} id the unique identifier for this data
@@ -192,7 +192,7 @@ var StorageProviderFirebase = function (url) {
   /**
    * Look up data by collection
    * @function query
-   * @memberof StorageProviderFirebase
+   * @memberof StorageProvider
    * @instance
    * @param {string} collection the namespace to load the data from
    * @param {string} sortBy (optional) the property to sort the results by
@@ -213,4 +213,4 @@ var StorageProviderFirebase = function (url) {
   }
 };
 
-module.exports = StorageProviderFirebase;
+module.exports = StorageProvider;
