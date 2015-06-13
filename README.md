@@ -14,9 +14,11 @@ A module for integrating le-storage-service and firebase
 ## Usage
 
 ```
-  var StorageProviderFirebase = require('le-storage-provider-firebase');
+  var Firebase = require('firebase');
+  var StorageProvider = require('le-storage-provider-firebase');
   var url = /* your Firebase url */;
-  var provider = new StorageProviderFirebase(url);
+  var ref = new Firebase(url);
+  var provider = new StorageProvider(ref);
 ```
 
 ## Tests
