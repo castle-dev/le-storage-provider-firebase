@@ -6,6 +6,10 @@ var jsdoc = require('gulp-jsdoc');
 var clean = require('gulp-clean');
 var runSequence = require('run-sequence');
 var mocha = require('gulp-mocha');
+var bump = require('gulp-bump');
+var git = require('gulp-git');
+var tag = require('gulp-tag-version');
+var rename = require("gulp-rename");
 
 gulp.task('clean', function () {
   return gulp.src('docs', { read : false })
@@ -31,6 +35,18 @@ gulp.task('test:e2e', function () {
       process.exit(-1);
   });
 });
+
+function updateVersionNumber(type) {
+  return gulp.src(['./package.json'])
+  .pipe(bump({type: type}))
+  .pipe(gulp.dest('./'))
+  .pipe(git.commit('chore(version): ' + type))
+  .pipe(tag({prefix: ''}));
+}
+
+gulp.task('bump:patch', function() { return updateVersionNumber('patch'); })
+gulp.task('bump:minor', function() { return updateVersionNumber('minor'); })
+gulp.task('bump:major', function() { return updateVersionNumber('major'); })
 
 gulp.task('watch', function () {
   gulp.watch(['src/**/*.js'], ['test:unit', 'docs']);
