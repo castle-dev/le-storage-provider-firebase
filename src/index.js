@@ -50,7 +50,7 @@ var StorageProvider = function(ref) {
       deferred.resolve(data);
     }
     // recurse through the properties
-    _ref.child(".info/serverTimeOffset").on('value', function(ss) {
+    _ref.child(".info/serverTimeOffset").once('value', function(ss) {
       var offset = ss.val() || 0;
       translateDatesRecursive(data, [], offset);
     });
@@ -87,7 +87,7 @@ var StorageProvider = function(ref) {
     }
     if (data && data._times) {
       // recurse through the properties
-      _ref.child(".info/serverTimeOffset").on('value', function(ss) {
+      _ref.child(".info/serverTimeOffset").once('value', function(ss) {
         var offset = ss.val() || 0;
         translateTimesRecursive(data._times, [], offset);
         delete data._times;
