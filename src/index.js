@@ -272,6 +272,8 @@ var StorageProvider = function(ref) {
       }, function(err) {
         deferred.reject(err);
       });
+    }, function(err) {
+      deferred.reject(err);
     });
     return deferred.promise;
   }
