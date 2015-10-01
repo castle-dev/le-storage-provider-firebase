@@ -68,7 +68,9 @@ var StorageProvider = function(ref) {
             currentPath.push(property);
             translateTimesRecursive(obj[property], currentPath, offset);
           } else {
-            var time = new Date(obj[property] - offset);
+            var coeff = 1000; // round times to the nearest second
+            var date = new Date(obj[property] - offset);
+            var time = new Date(Math.round(date.getTime() / coeff) * coeff);
             var dest = data;
             var src = data._times;
             for (var i = 0; i < path.length; i++) {
