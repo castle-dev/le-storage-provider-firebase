@@ -1,21 +1,22 @@
 language: node_js
+node_js:
+  - '0.12'
 before_install:
-- npm install -g gulp mocha
-- npm install
-- npm test
+  - npm install -g gulp mocha
+  - npm install
+  - npm test
 install:
-- git config --global user.email "travis-ci@entercastle.com"
-- git config --global user.name "Travis Castle"
-script:
-- gulp docs
-- cd docs
-- git init
-- git remote add origin "https://${GH_TOKEN}@github.com/castle-dev/le-storage-provider-firebase.git"
-- git checkout -B gh-pages
-- git add .
-- git commit -m "Updating documentation"
-- git push origin gh-pages -fq > /dev/null
+  - 'git config --global user.email "travis-ci@entercastle.com"'
+  - 'git config --global user.name "Travis Castle"'
+script: ./scripts/build.sh
+deploy:
+  provider: npm
+  email: castle-dev@entercastle.com
+  api_key: '${NPM_TOKEN}'
+  on:
+    branch: master
 env:
   global:
     - secure: ILeW0Cjubpmz828HQVCdsTMP39ZCKTJ5vThxjMFbncUPeMlG+iFvsg8xOVS1/0vYE5vd9n18fvfy+EpUiVIbgA8rV62c3PIHOrQ76MkJeETsxXKriF2zmzzcU9mgBj9UA3zGgkoKPmql0CasE2Eu59wuyO0w7LVPnZagpZqWqBs=
-    - FIREBASE_URL=FIREBASE_URL=https://le-firebase-test.firebaseio.com/
+    - 'FIREBASE_URL=FIREBASE_URL=https://le-firebase-test.firebaseio.com/'
+    - secure: b2NmnQ9GTRqFB1uw/I5XAjhr8RwOaJLOiYWW69vaAmiJ6K2TXs5AC5EzXCHFqj+9G/nEzR0XkGxaLGdTThcRCeF0b/DbXi8sfuG2mgI5v/9yExtex0izOOSP+L38QtT1lmg7hGu+9givosBHjwgUVl2bs8J0PdQ8eIyW58XgQqM=
