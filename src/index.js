@@ -177,6 +177,33 @@ var StorageProvider = function(ref) {
     return deferred.promise;
   };
   /**
+   * Archive a record
+   * @function archive
+   * @memberof StorageProvider
+   * @instance
+   * @param {string} collection the namespace to load the data from
+   * @param {string} id the unique identifier for this data
+   * @returns {Promise}
+   */
+  this.archive = function(collection, id) {
+    var deferred = q.defer()
+    _ref.child(collection).child(id).once('value', function (snapshot) {
+      var data = snapshot.val();
+      _ref.child('_archive').child(collection).child(id).set(data, function (err) {
+        if (err) { deferred.reject(err); }
+        else {
+          _ref.child(collection).child(id).remove(function (err) {
+            if (err) { deferred.reject(err); }
+            else {
+              deferred.resolve();
+            }
+          });
+        }
+      });
+    }, function (err) { deferred.reject(err); });
+    return deferred.promise;
+  };
+  /**
    * Set a sync listener for updates from firebase
    * @function sync
    * @memberof StorageProvider
