@@ -18,14 +18,14 @@ var StorageProvider = function(ref) {
   function convertClientDatesToServerTimes(data) {
     var deferred = q.defer();
 
-    function translateDatesRecursive(obj, path, offset) {
+    function translateDatesRecursive(obj, path) {
       if (!path) {
         path = [];
       }
       for (var property in obj) {
         if (obj.hasOwnProperty(property)) {
           if (isDate(obj[property])) {
-            var time = obj[property].getTime() + offset;
+            var time = obj[property].getTime();
             var src = data;
             if (!data._times) {
               data._times = {};
@@ -43,33 +43,29 @@ var StorageProvider = function(ref) {
           } else if (typeof obj[property] === 'object') {
             var currentPath = path.slice(); // copy the path array
             currentPath.push(property);
-            translateDatesRecursive(obj[property], currentPath, offset);
+            translateDatesRecursive(obj[property], currentPath);
           }
         }
       }
       deferred.resolve(data);
     }
-    // recurse through the properties
-    _ref.child(".info/serverTimeOffset").once('value', function(ss) {
-      var offset = ss.val() || 0;
-      translateDatesRecursive(data, [], offset);
-    });
+    translateDatesRecursive(data);
     return deferred.promise;
   };
 
   function convertServerTimesToClientDates(data) {
     var deferred = q.defer();
 
-    function translateTimesRecursive(obj, path, offset) {
+    function translateTimesRecursive(obj, path) {
       for (var property in obj) {
         if (obj.hasOwnProperty(property)) {
           if (typeof obj[property] === 'object') {
             var currentPath = path.slice(0); // copy the path array
             currentPath.push(property);
-            translateTimesRecursive(obj[property], currentPath, offset);
+            translateTimesRecursive(obj[property], currentPath);
           } else {
             var coeff = 1000; // round times to the nearest second
-            var date = new Date(obj[property] - offset);
+            var date = new Date(obj[property]);
             var time = new Date(Math.round(date.getTime() / coeff) * coeff);
             var dest = data;
             var src = data._times;
@@ -88,12 +84,8 @@ var StorageProvider = function(ref) {
       deferred.resolve(data);
     }
     if (data && data._times) {
-      // recurse through the properties
-      _ref.child(".info/serverTimeOffset").once('value', function(ss) {
-        var offset = ss.val() || 0;
-        translateTimesRecursive(data._times, [], offset);
-        delete data._times;
-      });
+      translateTimesRecursive(data._times, []);
+      delete data._times;
     } else {
       deferred.resolve(data);
     }
@@ -187,20 +179,24 @@ var StorageProvider = function(ref) {
    */
   this.archive = function(collection, id) {
     var deferred = q.defer()
-    _ref.child(collection).child(id).once('value', function (snapshot) {
+    _ref.child(collection).child(id).once('value', function(snapshot) {
       var data = snapshot.val();
-      _ref.child('_archive').child(collection).child(id).set(data, function (err) {
-        if (err) { deferred.reject(err); }
-        else {
-          _ref.child(collection).child(id).remove(function (err) {
-            if (err) { deferred.reject(err); }
-            else {
+      _ref.child('_archive').child(collection).child(id).set(data, function(err) {
+        if (err) {
+          deferred.reject(err);
+        } else {
+          _ref.child(collection).child(id).remove(function(err) {
+            if (err) {
+              deferred.reject(err);
+            } else {
               deferred.resolve();
             }
           });
         }
       });
-    }, function (err) { deferred.reject(err); });
+    }, function(err) {
+      deferred.reject(err);
+    });
     return deferred.promise;
   };
   /**

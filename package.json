@@ -1,6 +1,6 @@
 {
   "name": "le-storage-provider-firebase",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "A module for integrating le-storage-service and firebase",
   "main": "src/index.js",
   "scripts": {
